@@ -1,23 +1,40 @@
 # main_layout.kv
 #:import MDScreenManager kivymd.uix.screenmanager.MDScreenManager
 #:import MDScreen kivymd.uix.screen.MDScreen
+#:include screens/extra_screens.kv
+#:include styles.kv
+#:include screens/chatbot.kv
+#:include screens/setting.kv
+#:include screens/splash.kv
 
-# Include your other KV files
 #:import ChatbotScreen screens.chatbot_screen.ChatbotScreen
-#:import WelcomeScreen screens.welcome.WelcomeScreen
+#:import SplashScreen screens.splash_screen.SplashScreen
 #:import SettingsBox screens.setting.SettingsBox
 
-# custom kivy objects / classes
+#:import DocsScreen screens.docs_screen.DocsScreen
+#:import CameraScreen screens.camera_screen.CameraScreen
+#:import VoiceScreen screens.voice_screen.VoiceScreen
 
-
-# Define the ScreenManager as the root widget
 MDScreenManager:
-
-    WelcomeScreen:
-        id: welcome_scr
+    SplashScreen:
+        id: splash_scr
+        name: "splash_screen"
 
     ChatbotScreen:
         id: chatbot_scr
+        name: "chatbot_screen"
+
+    DocsScreen:
+        id: docs_scr
+        name: 'docs_screen'
+
+    CameraScreen:
+        id: camera_scr
+        name: 'camera_screen'
+
+    VoiceScreen:
+        id: voice_scr
+        name: 'voice_screen'
 
     MDScreen:
         name: 'settings_screen'

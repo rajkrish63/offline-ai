@@ -1,0 +1,424 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+#:import parse_color kivy.parser.parse_color
+#:import Animation kivy.animation.Animation
+
+<TempSpinWait>:
+    id: temp_spin
+    orientation: 'horizontal'
+    adaptive_height: True
+    padding: dp(12), dp(8)
+    spacing: dp(8)
+
+    MDLabel:
+        text: root.text
+        font_style: "Body1"
+        adaptive_width: True
+        theme_text_color: "Custom"
+        text_color: parse_color("#9ca3af")   # gray-400
+        font_size: sp(14)
+
+    MDSpinner:
+        size_hint: None, None
+        size: dp(16), dp(16)
+        active: True
+        color: parse_color("#6366f1")        # indigo-500
+
+<SidebarItem>:
+    size_hint_y: None
+    height: dp(36)
+    padding: dp(12), 0
+    radius: [dp(8)]
+    elevation: 0
+    ripple_behavior: True
+
+    canvas.before:
+        Color:
+            rgba: parse_color("#4f46e5") if root.active else (0, 0, 0, 0)
+        Rectangle:
+            size: dp(2), self.height
+            pos: self.x, self.y
+
+    MDLabel:
+        text: root.text
+        theme_text_color: "Custom"
+        text_color: parse_color("#e5e5e5")
+        valign: "middle"
+
+
+<UsrResp>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: content.texture_size[1] + dp(24)
+
+    # safe sizing
+    size_hint_x: None
+    width: min(self.parent.width * 0.72, dp(520)) if self.parent else dp(520)
+    pos_hint: {"right": 0.98}
+
+    padding: dp(16), dp(12)
+    spacing: dp(4)
+
+    canvas.before:
+        Color:
+            rgba: parse_color("#6366f1")
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [dp(18), dp(18), dp(6), dp(18)]
+
+    MDLabel:
+        id: content
+        text: root.text
+        markup: True
+        halign: "left"
+        valign: "top"
+        theme_text_color: "Custom"
+        text_color: 1,1,1,1
+        font_size: sp(15)
+        size_hint_y: None
+        height: self.texture_size[1]
+
+
+<BotResp>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: self.minimum_height + dp(16)
+
+    size_hint_x: None
+    width: min(self.parent.width * 0.82, dp(620)) if self.parent else dp(620)
+    pos_hint: {"x": 0.02}
+
+    padding: dp(16), dp(12)
+    spacing: dp(10)
+
+    canvas.before:
+        Color:
+            rgba: parse_color("#17171b")
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [dp(18), dp(18), dp(18), dp(6)]
+
+    MDLabel:
+        text: root.text
+        markup: True
+        theme_text_color: "Custom"
+        text_color: parse_color("#f3f4f6")
+        font_size: sp(15)
+        adaptive_height: True
+
+    MDBoxLayout:
+        orientation: "horizontal"
+        size_hint_y: None
+        height: dp(32)
+
+        Widget:
+            size_hint_x: 1
+
+        MDIconButton:
+            icon: 'content-copy'
+            theme_icon_color: "Custom"
+            icon_color: parse_color("#9ca3af")
+            md_bg_color: 0, 0, 0, 0
+            on_release: app.copy_final_msg(self)
+
+            canvas.before:
+                Color:
+                    rgba: parse_color("#26262b")  # small button bg
+                RoundedRectangle:
+                    size: dp(32), dp(32)
+                    pos: self.center_x - dp(16), self.center_y - dp(16)
+                    radius: [dp(8)]
+
+
+<BotTmpResp>:
+    orientation: "vertical"
+    size_hint_y: None
+    height: self.minimum_height + dp(16)
+
+    size_hint_x: None
+    width: min(self.parent.width * 0.82, dp(620)) if self.parent else dp(620)
+    pos_hint: {"x": 0.02}
+
+    padding: dp(16), dp(12)
+    spacing: dp(10)
+
+    canvas.before:
+        Color:
+            rgba: parse_color("#17171b")
+        RoundedRectangle:
+            size: self.size
+            pos: self.pos
+            radius: [dp(18), dp(18), dp(18), dp(6)]
+
+    MDLabel:
+        id: content
+        font_style: "Body1"
+        text: root.text
+        valign: "top"
+        halign: "left"
+        padding: 0
+        theme_text_color: "Custom"
+        text_color: parse_color("#e5e7eb")
+        font_size: sp(15)
+
+    MDBoxLayout:
+        orientation: "horizontal"
+        spacing: dp(8)
+        size_hint_y: None
+        height: dp(32)
+
+        Widget:
+            size_hint_x: 1
+
+        MDIconButton:
+            icon: 'content-copy'
+            theme_icon_color: "Custom"
+            icon_color: parse_color("#9ca3af")
+            md_bg_color: 0, 0, 0, 0
+            on_release: app.copy_tmp_msg(self)
+
+            canvas.before:
+                Color:
+                    rgba: parse_color("#26262b")
+                RoundedRectangle:
+                    size: dp(32), dp(32)
+                    pos: self.center_x - dp(16), self.center_y - dp(16)
+                    radius: [dp(8)]
+
+        MDIconButton:
+            icon: 'stop'
+            theme_icon_color: "Custom"
+            icon_color: parse_color("#ef4444")  # red-500
+            md_bg_color: 0, 0, 0, 0
+            on_release: app.stop_chat()
+
+            canvas.before:
+                Color:
+                    rgba: parse_color("#26262b")
+                RoundedRectangle:
+                    size: dp(32), dp(32)
+                    pos: self.center_x - dp(16), self.center_y - dp(16)
+                    radius: [dp(8)]
+
+
+<ChatbotScreen>:
+    MDBoxLayout:
+        orientation: "horizontal"
+        size_hint: 1, 1
+        padding: 0, root.top_pad, 0, root.bottom_pad
+        md_bg_color: parse_color("#0f0f0f")
+
+        # Sidebar
+        MDBoxLayout:
+            id: sidebar
+            size_hint_x: None
+            width: dp(260) if root.width > dp(980) else dp(0)
+            opacity: 1 if root.width > dp(980) else 0
+            disabled: root.width <= dp(980)
+            md_bg_color: parse_color("#111111")
+            orientation: "vertical"
+            padding: dp(16), dp(18)
+            spacing: dp(14)
+
+            MDLabel:
+                text: "OnLLM"
+                font_style: "H6"
+                theme_text_color: "Custom"
+                text_color: parse_color("#e5e5e5")
+                bold: True
+                adaptive_height: True
+
+            MDBoxLayout:
+                orientation: "vertical"
+                spacing: dp(6)
+                size_hint_y: None
+                height: self.minimum_height
+
+                SidebarItem:
+                    text: "New Chat"
+                    active: True
+
+                SidebarItem:
+                    text: "Search Chats"
+
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(1)
+                md_bg_color: parse_color("#242424")
+
+            MDLabel:
+                text: "Your chats"
+                font_size: sp(12)
+                theme_text_color: "Custom"
+                text_color: parse_color("#b6b6b6")
+                adaptive_height: True
+
+            MDScrollView:
+                do_scroll_x: False
+                bar_width: dp(4)
+
+                MDBoxLayout:
+                    id: chat_list
+                    orientation: "vertical"
+                    spacing: dp(4)
+                    size_hint_y: None
+                    height: self.minimum_height
+
+                    SidebarItem:
+                        text: "UI polish sprint"
+                    SidebarItem:
+                        text: "Model tuning"
+                    SidebarItem:
+                        text: "RAG checklist"
+                    SidebarItem:
+                        text: "Design review"
+                    SidebarItem:
+                        text: "Feature backlog"
+
+            Widget:
+
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(48)
+                spacing: dp(10)
+                padding: dp(8), 0
+
+                MDCard:
+                    size_hint: None, None
+                    size: dp(32), dp(32)
+                    radius: [dp(16)]
+                    md_bg_color: parse_color("#262626")
+                    elevation: 0
+
+                    MDLabel:
+                        text: "R"
+                        theme_text_color: "Custom"
+                        text_color: parse_color("#f3f4f6")
+                        halign: "center"
+                        valign: "middle"
+
+                MDLabel:
+                    text: "Raj"
+                    theme_text_color: "Custom"
+                    text_color: parse_color("#e5e5e5")
+                    valign: "middle"
+
+        # Main
+        MDBoxLayout:
+            orientation: "vertical"
+            size_hint_x: 1
+            padding: dp(28), dp(20), dp(28), dp(16)
+            spacing: dp(16)
+            md_bg_color: parse_color("#0f0f0f")
+
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(40)
+
+                Widget:
+
+                MDDropDownItem:
+                    id: llm_menu
+                    text: "Select model"
+                    size_hint: None, None
+                    size: dp(140), dp(32)
+                    on_release: app.llm_menu.open()
+                    theme_text_color: "Custom"
+                    text_color: parse_color("#e5e5e5")
+                    md_bg_color: parse_color("#1f1f1f")
+
+            AnchorLayout:
+                size_hint_y: None
+                height: dp(80)
+                anchor_x: "center"
+                anchor_y: "center"
+
+                MDLabel:
+                    text: "Hey, Raj. Ready to dive in?"
+                    font_style: "H4"
+                    theme_text_color: "Custom"
+                    text_color: parse_color("#bdbdbd")
+                    halign: "center"
+                    valign: "middle"
+                    text_size: self.width, None
+
+            MDScrollView:
+                do_scroll_x: False
+                size_hint_y: 1
+                bar_width: dp(4)
+
+                AnchorLayout:
+                    anchor_x: "center"
+                    anchor_y: "top"
+                    size_hint_y: None
+                    height: chat_history_id.height
+
+                    MDBoxLayout:
+                        id: chat_history_id
+                        orientation: "vertical"
+                        padding: dp(12), dp(12)
+                        spacing: dp(10)
+                        size_hint_y: None
+                        height: self.minimum_height
+                        size_hint_x: None
+                        width: min(self.parent.width, dp(860)) if self.parent else dp(860)
+
+            MDBoxLayout:
+                size_hint_y: None
+                height: dp(76)
+
+                MDCard:
+                    id: composer
+                    orientation: "horizontal"
+                    size_hint_y: None
+                    height: dp(56)
+                    padding: dp(12), dp(6)
+                    spacing: dp(8)
+                    md_bg_color: parse_color("#1c1c1c")
+                    radius: [dp(28)]
+                    elevation: 2
+
+                    MDIconButton:
+                        icon: "plus"
+                        theme_icon_color: "Custom"
+                        icon_color: parse_color("#e5e5e5")
+                        on_release: app.open_quick_actions()
+
+                    MDTextField:
+                        id: chat_input
+                        hint_text: "Ask anything"
+                        mode: "rectangle"
+                        multiline: True
+                        size_hint_y: None
+                        height: dp(40)
+                        text_color: parse_color("#f9fafb")
+                        hint_text_color: parse_color("#9ca3af")
+                        cursor_color: parse_color("#f9fafb")
+                        fill_color: 0, 0, 0, 0
+                        line_color_normal: 0,0,0,0
+                        line_color_focus: 0,0,0,0
+                        on_focus:
+                            Animation(height=dp(64), d=0.12).start(composer) if self.focus else Animation(height=dp(56), d=0.12).start(composer)
+
+                    MDIconButton:
+                        icon: "microphone"
+                        theme_icon_color: "Custom"
+                        icon_color: parse_color("#e5e5e5")
+                        on_release: app.root.current = "voice_screen"
+
+                    MDIconButton:
+                        icon: "waveform"
+                        theme_icon_color: "Custom"
+                        icon_color: parse_color("#0f0f0f")
+                        on_release: app.send_message(self, chat_input)
+                        md_bg_color: 0, 0, 0, 0
+
+                        canvas.before:
+                            Color:
+                                rgba: parse_color("#f5f5f5")
+                            RoundedRectangle:
+                                size: dp(38), dp(38)
+                                pos: self.center_x - dp(19), self.center_y - dp(19)
+                                radius: [dp(19)]

@@ -1,0 +1,31 @@
+#:import dp kivy.metrics.dp
+#:import parse_color kivy.parser.parse_color
+
+# Shared styles and templates for the app
+
+<RoundedInput@MDBoxLayout>:
+    orientation: 'horizontal'
+    padding: dp(4), dp(4)
+    spacing: dp(8)
+    size_hint_y: None
+    height: dp(56)
+    radius: [dp(32), dp(32), dp(32), dp(32)]
+    canvas.before:
+        Color:
+            rgba: parse_color('#3a3a3a')
+        RoundedRectangle:
+            size: self.width, self.height
+            pos: self.pos
+            radius: [dp(32), dp(32), dp(32), dp(32)]
+
+<IconListItem@OneLineIconListItem>:
+    IconLeftWidget:
+        icon: root.icon if hasattr(root, 'icon') else 'android'
+
+# Common color aliases (placeholder - add properties here if needed)
+<Colors@Widget>:
+    size_hint: None, None
+    size: dp(0), dp(0)
+
+# Example usage note (do not remove):
+# Replace MDBoxLayout input container with RoundedInput in kv files to use centralized styles.

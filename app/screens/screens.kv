@@ -1,0 +1,229 @@
+#:import dp kivy.metrics.dp
+#:import sp kivy.metrics.sp
+#:import parse_color kivy.parser.parse_color
+#:import FadeTransition kivy.uix.screenmanager.FadeTransition
+
+<TempSpinWait>:
+    id: temp_spin
+    orientation: 'horizontal'
+    adaptive_height: True
+    padding: dp(12), dp(8)
+    spacing: dp(8)
+    opacity: 0
+
+    MDLabel:
+        text: root.text
+        font_style: "Body1"
+        adaptive_width: True
+        theme_text_color: "Custom"
+        text_color: "#6b7280"
+        font_size: sp(14)
+
+    MDSpinner:
+        size_hint: None, None
+        size: dp(16), dp(16)
+        active: True
+        color: "#6366f1"
+
+<UsrResp>:
+    orientation: 'vertical'
+    size_hint_y: None
+    height: content.texture_size[1] + dp(24)
+    size_hint_x: None
+    width: min(root.parent.width * 0.75, dp(600))
+    pos_hint: {"right": 0.98}
+    padding: dp(16), dp(12)
+    spacing: dp(4)
+    opacity: 0
+    canvas.before:
+        Color:
+            rgba: 0.388, 0.4, 0.961, 1  # #6366f1 - Modern blue
+        RoundedRectangle:
+            size: self.width, self.height
+            pos: self.pos
+            radius: [dp(18), dp(18), dp(4), dp(18)]
+
+    MDLabel:
+        id: content
+        font_style: "Body1"
+        text: root.text
+        markup: True
+        halign: 'left'
+        valign: 'top'
+        allow_selection: True
+        allow_copy: True
+        padding: 0
+        theme_text_color: "Custom"
+        text_color: "#ffffff"
+        font_size: sp(15)
+
+<BotResp>:
+    orientation: 'vertical'
+    size_hint_y: None
+    size_hint_x: None
+    width: min(root.parent.width * 0.85, dp(700))
+    pos_hint: {"x": 0.02}
+    height: self.minimum_height + dp(16)
+    padding: dp(16), dp(12)
+    spacing: dp(12)
+    opacity: 0
+    canvas.before:
+        Color:
+            rgba: 0.09, 0.09, 0.11, 1  # #17171b - Dark card
+        RoundedRectangle:
+            size: self.width, self.height
+            pos: self.pos
+            radius: [dp(18), dp(18), dp(18), dp(4)]
+
+    MyRstDocument:
+        base_font_size: 38
+        padding: 0
+        text: root.text
+        background_color: parse_color('#17171b')
+        color: parse_color('#e5e7eb')
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        padding: 0
+        spacing: dp(8)
+        size_hint_y: None
+        height: dp(32)
+        
+        Widget:
+            size_hint_x: 1
+            
+        MDIconButton:
+            icon: 'content-copy'
+            theme_icon_color: "Custom"
+            icon_color: '#9ca3af'
+            on_release: app.copy_final_msg(self)
+            md_bg_color: 0, 0, 0, 0
+            
+            canvas.before:
+                Color:
+                    rgba: 0.15, 0.15, 0.17, 1
+                RoundedRectangle:
+                    size: dp(32), dp(32)
+                    pos: self.center_x - dp(16), self.center_y - dp(16)
+                    radius: [dp(8)]
+
+<BotTmpResp>:
+    orientation: 'vertical'
+    size_hint_y: None
+    height: content.texture_size[1] + dp(60)
+    size_hint_x: None
+    width: min(root.parent.width * 0.85, dp(700))
+    pos_hint: {"x": 0.02}
+    padding: dp(16), dp(12)
+    spacing: dp(12)
+    opacity: 0
+    canvas.before:
+        Color:
+            rgba: 0.09, 0.09, 0.11, 1
+        RoundedRectangle:
+            size: self.width, self.height
+            pos: self.pos
+            radius: [dp(18), dp(18), dp(18), dp(4)]
+
+    MDLabel:
+        id: content
+        font_style: "Body1"
+        text: root.text
+        valign: 'top'
+        halign: 'left'
+        padding: 0
+        theme_text_color: "Custom"
+        text_color: "#e5e7eb"
+        font_size: sp(15)
+
+    MDBoxLayout:
+        orientation: 'horizontal'
+        spacing: dp(8)
+        size_hint_y: None
+        height: dp(32)
+        
+        Widget:
+            size_hint_x: 1
+            
+        MDIconButton:
+            icon: 'content-copy'
+            theme_icon_color: "Custom"
+            icon_color: '#9ca3af'
+            on_release: app.copy_tmp_msg(self)
+            md_bg_color: 0, 0, 0, 0
+            
+            canvas.before:
+                Color:
+                    rgba: 0.15, 0.15, 0.17, 1
+                RoundedRectangle:
+                    size: dp(32), dp(32)
+                    pos: self.center_x - dp(16), self.center_y - dp(16)
+                    radius: [dp(8)]
+                    
+        MDIconButton:
+            icon: 'stop'
+            theme_icon_color: "Custom"
+            icon_color: '#ef4444'
+            on_release: app.stop_chat()
+            md_bg_color: 0, 0, 0, 0
+            
+            canvas.before:
+                Color:
+                    rgba: 0.15, 0.15, 0.17, 1
+                RoundedRectangle:
+                    size: dp(32), dp(32)
+                    pos: self.center_x - dp(16), self.center_y - dp(16)
+                    radius: [dp(8)]
+
+<ChatbotScreen>:
+    MDBoxLayout:
+        orientation: 'vertical'
+        padding: 0, root.top_pad, 0, 0
+        
+        # Modern header
+        MDBoxLayout:
+            size_hint_y: None
+            height: dp(64)
+            padding: dp(16), dp(8)
+            spacing: dp(12)
+            canvas.before:
+                Color:
+                    rgba: 0.07, 0.07, 0.09, 1  # #121217
+                Rectangle:
+                    size: self.size
+                    pos: self.pos
+
+            MDIconButton:
+                icon: "arrow-left"
+                theme_icon_color: "Custom"
+                icon_color: "#e5e7eb"
+                on_release: setattr(app.root, "current", "splash_screen")
+                size_hint: None, None
+                size: dp(40), dp(40)
+
+            MDLabel:
+                text: "AI Assistant"
+                font_style: "H6"
+                theme_text_color: "Custom"
+                text_color: "#ffffff"
+                bold: True
+                font_size: sp(20)
+                adaptive_width: True
+
+            Widget:
+                size_hint_x: 1
+
+            MDDropDownItem:
+                id: llm_menu
+                text: "GPT-4"
+                font_size: sp(13)
+                size_hint: None, None
+                size: dp(120), dp(40)
+                on_release: app.llm_menu.open()
+                theme_text_color: "Custom"
+                text_color: "#9ca3af"
+                md_bg_color: 0.12, 0.12, 0.14, 1
+
+            MDIconButton:
+                icon: "tune"
+{
